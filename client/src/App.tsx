@@ -1,34 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+
+interface Data {
+  name: string,
+  number: number
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [data, setData] = useState<Data | null>(null)
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetch("http://localhost:3000/123")
+      const data: Data = await res.json()
+
+      console.log(data);
+      setData(data)
+    })()
+  })
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <main className='w-full flex flex-col gap-4 mx-28'>
+      {data !== null && (
+        <>
+          <h1 className='text-3xl font-bold'>{data.name}</h1>
+          <h2 className='text-lg font-semibold'>{data.number}</h2>
+        </>
+      )}
+    </main>
   )
 }
 
